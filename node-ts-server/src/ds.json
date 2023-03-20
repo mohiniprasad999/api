@@ -1,0 +1,43 @@
+
+//  import mongoose from 'mongoose';
+//  import uniqueValidator from 'mongoose-unique-validator';
+// const UserSchema = mongoose.Schema({
+//   "0": {
+//     "id": "1",
+//     "type": "ab",
+//     "name": "Cake"
+//   },
+//   "1": {
+//     "id": "2",
+//     "type": "ac",
+//     "name": "Raised"
+//   },
+//   "2": {
+//     "id": "3",
+//     "type": "cd",
+//     "name": "Old Fashioned"
+//   },
+//   "3": {
+//     "id": "4",
+//     "type": "de",
+//     "name": "Old Fashioned"
+//   },
+//   "4": {
+//     "id": "5",
+//     "type": "ef",
+//     "name": "Old Fashioned"
+//   },
+//   "5": {
+//     "id": "6",
+//     "type": "fg",
+//     "name": "Old Fashioned"
+//   },
+//   "id": "6",
+//   "name": "Old",
+//   "type": "fg"
+// });
+// UserSchema.plugin(uniqueValidator);
+
+// const UserSchemaModel = mongoose.model('user_collection',UserSchema);
+
+//  export default UserSchemaModel
