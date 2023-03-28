@@ -1,9 +1,12 @@
-import { Request, Response } from "express";
+// import { Request, Response } from "express";
 import userModel from "../model/userModel";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { resolve } from "path";
+import { Request, Response, NextFunction, response } from "express";
 
 const JWT_SECRET = 'secrettoken';
+let token: string;
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -60,3 +63,26 @@ export const login = async (req: Request, res: Response) => {
       .json({ success: false, message: "error"});
   }
 };
+
+// export const decode = async (req: Request, res: Response) => {
+
+//   const token = req.jwtData?.token;
+
+//   if (!token) {
+//     return res.status(401).send('Unauthorized');
+//   }
+
+//   res.send(`Hello, user ${token}!`);
+// };
+// export const login = async (req: Request, res: Response) => {
+//   const { email, password } = req.body;
+
+// try {
+//   userId:"todo";
+//   const user = await user.findById(user).select("-password");
+// } catch (error) {
+//   console.log("error");
+//   response.status(500).send("INTERNAL SERVER ERROR");
+// }
+//}
+
