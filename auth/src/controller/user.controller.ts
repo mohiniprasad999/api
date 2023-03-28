@@ -1,47 +1,56 @@
-import { NextFunction, Request, Response } from 'express';
-import userModel from '../model/userModel';
-//import { findAllUsers } from '../services/user.service';
+import { Request, Response } from "express";
+import userModel from "../model/user.model";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-// Find All users
-export const findAllUsers = async () => {
-    return await userModel.find();
-  };
+const JWT_SECRET = "secrettoken";
 
-
-export const getMeHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const register = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
   try {
-    const user = res.locals.user;
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
+    const user = await userModel.findOne({ email });
+    if (user)
+      return res
+        .status(403)
+        .json({ success: false, message: "User already registered" });
+
+    const hashPass = await bcrypt.hash(password, 8);
+
+    const newUser = await userModel.create({
+      name,
+      email,
+      password: hashPass,
     });
-  } catch (err: any) {
-    next(err);
+
+    res.status(201).json({ success: true, message: "success" });
+  } catch (error) {
+    res.status(500).json({ success: false });
   }
 };
 
-export const getAllUsersHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
   try {
-    const users = await findAllUsers();
+    const user = await userModel.findOne({ email });
+    if (!user)
+      return res.status(404).json({ success: false, message: "Forbidden" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res
+        .status(401)
+        .json({ success: false, message: "invalid Password" });
+
+    const userData = { name: user.name, email: user.email, id: user.id };
+    const token = jwt.sign(userData, JWT_SECRET);
     res.status(200).json({
-      status: 'success',
-      result: users.length,
-      data: {
-        users,
-      },
+      success: true,
+      message: "Successfully Logged In",
+      token,
     });
-  } catch (err: any) {
-    next(err);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "error" });
   }
 };
-
